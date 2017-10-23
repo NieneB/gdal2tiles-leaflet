@@ -1,76 +1,18 @@
-# gdal2tiles-leaflet
+# Docker image for gdal2tiles-leaflet
 
-> Generate raster image tiles for use with leaflet.
+Generate raster image tiles for use with leaflet in docker.
 
-[Example][example] in action.
 
-This is a modified version of [gdal2tiles.py][] which adds support for raster images as plain 2D maps in [leafletjs][].
+	docker run --rm -v `pwd`:/data niene/gdal2tiles-leaflet -l -p raster -z 0-5 -w none /data/<image> /data/<tilesdir> 
 
-It adds the option `-l` or `--leaflet` to generate the resulting images with the reference point `[0,0]` in the upper-left (North-West) corner, opposed to the standard behaviour for TMS tiles using the lower-left (South-East) corner.
 
-Together with the small [leafletjs][] plugin [leaflet-rastercoords][] you'll be able to add markers at the correct position using the (x, y) coordinates of the full-size image.
 
-## Prerequisites
 
-On Debian style OS:
 
-    sudo apt install python-gdal
 
-for others give your search-engine a try...
+# Doccumentation from gdal2tiles-leaflet from Commenthol
 
-## Basic usage
-
-````
-$ gdal2tiles.py -l -p raster -z 0-5 -w none <image> <tilesdir>
-````
-
-Check [test/createtiles.sh](test/createtiles.sh) for usage.
-
-If the `-z` option is omitted then the tool considers the min. zoom level otherwise note...
-
-**Note:** The min zoom level for tile generation must be greater or
-equal to `log2(max(width, height)/tilesize)`
-
-Assuming an image with 2000x3000 pixels:
-
-````
-# take the larger dimension -> here height = 3000px
-$ echo "l(3000/256)/l(2)" | bc -l
-# 3.55 --> min zoomlevel for tile generation is 4
-# means: `gdal2tiles.py -l -p raster -z 0-2 ...`
-#                                          \__ is not allowed
-# correct usage
-$ gdal2tiles -l -p raster -z 0-4 ...
-````
-
-## Multicore usage
-
-The same works with multicore support, thanks to [gdal2tiles-Ticket-4379][].
-
-````
-$ gdal2tiles-multiprocess.py -l -p raster -z 0-5 -w none <image> <tilesdir>
-````
-
-## Usage with Leaflet
-
-To use the generated tiles with Leaflet there is a small plugin to correctly set the required projection for raster images.
-Please refer to the documention at [leaflet-rastercoords][].
-
-## Example
-
-To run the example you'll need to generate the tiles for the large image first.
-
-````
-$ cd test
-$ ./createtiles.sh
-$ open index.html
-````
-
-Then open `index.html` in a browser.
-
-[![The sample in test](test.png)][example]
-
-Or see it [here][example] in action.
+See: https://github.com/commenthol/gdal2tiles-leaflet
 
 ## Contribution and License Agreement
 
